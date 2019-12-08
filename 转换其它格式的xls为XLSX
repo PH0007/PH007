@@ -1,0 +1,25 @@
+#%%转换其它格式的xls为XLSX
+import pandas as pd
+
+
+class ExlsFile(object):
+    '''转换其它格式的EXCEL成为XLSX'''
+    def __init__(self, pFile):
+        '''导入文件'''
+        self.xlsx = pd.ExcelFile(pFile)
+        self.sheetname = self.xlsx.sheet_names
+
+    def changeFormat(self,pTo_File):
+        '''格式转换，并输出文件'''
+        writer = pd.ExcelWriter(pTo_File)
+        for i in range(len(self.sheetname)):
+            X1 = self.xlsx.parse(sheet_name= self.sheetname[i])
+            X1.to_excel(writer, sheet_name= self.sheetname[i],index=False)
+        writer.save()
+
+
+#%% 读取excel
+if __name__ == '__main__':
+    file1 = ExlsFile(r'省外事业部条码费统计.xls')
+    file1.changeFormat(r'myTemp.xlsx')
+    print("转换成功！")
