@@ -1,23 +1,24 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QIcon
+#%%
+import pandas as pd
 
+f1= pd.read_csv("csvText.csv",header=None)
+#%%
+f1.columns= ['name','date','flag','attri']
 
-class Ui_mainWindow(object):
-    def setupUi(self, mainWindow):
-        mainWindow.setObjectName("mainWindow")
-        mainWindow.setWindowModality(QtCore.Qt.WindowModal)
-        mainWindow.resize(624, 511)
-        # mainWindow.setFixedSize(841,556)
-        QtCore.QMetaObject.connectSlotsByName(mainWindow)
-        mainWindow.setWindowTitle('您好')
-        mainWindow.setWindowIcon(QIcon('logo.png'))
+#%%
+f1.date = pd.to_datetime(f1.date)
 
+#%%
+f1.set_index('date',inplace=True)
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    mainWindow = QtWidgets.QMainWindow()
-    ui = Ui_mainWindow()
-    ui.setupUi(mainWindow)
-    mainWindow.show()
-    sys.exit(app.exec_())
+# %%
+f1.attri.plot()
+
+#%%
+f1.reset_index(inplace=True)
+#%%
+f1.date= f1.date.apply(pd.Timestamp)
+
+#%%
+f1['X1']= f1.attri.shift(-1)
+
